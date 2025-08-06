@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(120deg, #e3f0ff 0%, #c1e8ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container {
+            background: #fff;
+            margin-top: 40px;
+            width: 97vw;
+            max-width: 1200px;
+            padding: 36px 32px 32px 32px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(33,150,243,0.10), 0 2px 8px 0 rgba(0,0,0,0.04);
+            position: relative;
+        }
+        .logout-link {
+            position: absolute;
+            top: 36px;
+            right: 40px;
+            font-size: 1.08rem;
+            color: #2196f3;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: color 0.18s;
+        }
+        .logout-link:hover {
+            color: #1976d2;
+            text-decoration: underline;
+        }
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 28px;
+            font-size: 2.3rem;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        h2 {
+            color: #2196f3;
+            font-size: 1.32rem;
+            margin-top: 34px;
+            border-bottom: 2px solid #b3d7f6;
+            padding-bottom: 6px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #f7fbff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px 0 rgba(33,150,243,0.05);
+        }
+        th, td {
+            border: none;
+            padding: 13px 16px;
+            text-align: left;
+        }
+        th {
+            background-color: #2196f3;
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        tr:nth-child(even) {
+            background-color: #eaf4fb;
+        }
+        tr:hover {
+            background-color: #e3f0ff;
+        }
+        .actions button, .actions a {
+            margin-right: 5px;
+            padding: 7px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.17s;
+        }
+        .edit-btn {
+            background: linear-gradient(90deg,#ffe082 60%,#ffd54f 100%);
+            color: #333;
+        }
+        .edit-btn:hover {
+            background: linear-gradient(90deg,#ffd54f 60%,#ffca28 100%);
+        }
+        .delete-btn {
+            background: linear-gradient(90deg,#e57373 60%,#ef5350 100%);
+            color: white;
+        }
+        .delete-btn:hover {
+            background: linear-gradient(90deg,#ef5350 60%,#d32f2f 100%);
+        }
+        .form-section {
+            margin-top: 44px;
+            padding: 28px 22px 22px 22px;
+            background-color: #f0f7ff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px 0 rgba(33,150,243,0.06);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .form-section label {
+            font-weight: 500;
+            color: #1976d2;
+            margin-bottom: 2px;
+            margin-top: 4px;
+        }
+        .form-section input, .form-section select {
+            padding: 11px 14px;
+            border-radius: 8px;
+            border: 1.5px solid #b3d7f6;
+            font-size: 1rem;
+            background: #f7fbff;
+            transition: border-color 0.2s;
+        }
+        .form-section input:focus, .form-section select:focus {
+            outline: none;
+            border-color: #2196f3;
+            background: #fff;
+        }
+        .form-section button {
+            padding: 12px 0;
+            background: linear-gradient(90deg, #2196f3 60%, #21cbf3 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px 0 rgba(33,150,243,0.08);
+            transition: background 0.2s;
+        }
+        .form-section button:hover {
+            background: linear-gradient(90deg, #1976d2 60%, #00bcd4 100%);
+        }
+        .back-btn {
+            margin-top: 34px;
+            text-align: center;
+        }
+        .back-btn a {
+            text-decoration: none;
+            color: #2196f3;
+            font-weight: bold;
+            font-size: 1.07rem;
+        }
+        .back-btn a:hover {
+            text-decoration: underline;
+            color: #1976d2;
+        }
+        @media (max-width: 900px) {
+            .container {
+                padding: 14px 4vw 16px 4vw;
+            }
+            .form-section {
+                padding: 18px 2vw 18px 2vw;
+            }
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 10px;
+                padding: 4vw 0 4vw 0;
+                width: 99vw;
+            }
+            .logout-link {
+                top: 18px;
+                right: 12px;
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .form-section {
+                padding: 10px 1vw 10px 1vw;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Logout link at the top right -->
+    <a th:href="@{/logout}" class="logout-link">Logout</a>
+
+    <h1>Admin Dashboard</h1>
+
+    <h2>All Doctors</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Specialization</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doctor : ${doctors}">
+            <td th:text="${doctor.id}"></td>
+            <td th:text="${doctor.name}"></td>
+            <td th:text="${doctor.email}"></td>
+            <td th:text="${doctor.specialization}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>All Users</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+            <td class="actions">
+                <button class="edit-btn"
+                        th:attr="onclick=|populateForm('${user.id}', '${user.name}', '${user.email}', '${user.password}', '${user.role}', '${user.specialization}')|">
+                    Edit
+                </button>
+                <a th:href="@{'/admin/delete/' + ${user.id}}">
+                    <button class="delete-btn">Delete</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- =================== APPOINTMENT MANAGEMENT SECTION =================== -->
+    <h2>All Appointments</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Doctor</th>
+            <th>Patient</th>
+            <th>Date & Time</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appt : ${appointments}">
+            <td th:text="${appt.id}"></td>
+            <td th:text="${appt.doctor != null ? appt.doctor.name : 'N/A'}"></td>
+            <td th:text="${appt.patient != null ? appt.patient.name : 'N/A'}"></td>
+            <td th:text="${#temporals.format(appt.appointmentDate, 'yyyy-MM-dd HH:mm')}"></td>
+            <td th:text="${appt.status}"></td>
+            <td class="actions">
+                <!-- Edit option removed -->
+                <a th:href="@{'/admin/appointment/delete/' + ${appt.id}}" class="delete-btn"
+                   onclick="return confirm('Are you sure you want to delete this appointment?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- =================== ADD/UPDATE USER FORM =================== -->
+    <div class="form-section">
+        <h2 th:text="${newUser.id == null} ? 'Add User' : 'Update User'"></h2>
+        <form th:action="@{${newUser.id == null} ? '/admin/add' : '/admin/update'}" method="post">
+            <input type="hidden" id="userId" name="id" th:value="${newUser.id}">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Name" th:value="${newUser.name}" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" th:value="${newUser.email}" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Password" th:value="${newUser.password}" required>
+            <label for="role">Role</label>
+            <select id="role" name="role" required onchange="toggleSpecialization()">
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}"
+                        th:selected="${role == newUser.role}">
+                </option>
+            </select>
+            <input type="text" id="specialization" name="specialization" placeholder="Specialization (Only for doctors)"
+                   th:value="${newUser.specialization}" style="display: none;">
+            <button type="submit" th:text="${newUser.id == null} ? 'Add User' : 'Update User'"></button>
+        </form>
+    </div>
+
+    <div class="back-btn">
+        <a href="/home">← Back to Home</a>
+    </div>
+</div>
+
+<script>
+    function populateForm(id, name, email, password, role, specialization) {
+        document.getElementById('userId').value = id;
+        document.getElementById('name').value = name;
+        document.getElementById('email').value = email;
+        document.getElementById('password').value = password;
+        document.getElementById('role').value = role;
+        document.getElementById('specialization').value = specialization;
+        document.getElementById('specialization').style.display = role === 'DOCTOR' ? 'block' : 'none';
+    }
+    function toggleSpecialization() {
+        const role = document.getElementById('role').value;
+        document.getElementById('specialization').style.display = role === 'DOCTOR' ? 'block' : 'none';
+    }
+    window.onload = toggleSpecialization;
+</script>
+</body>
+</html>
